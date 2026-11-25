@@ -1,0 +1,20 @@
+import jwt from "jsonwebtoken";
+import { ENV } from "../config/env.js";
+
+export const generateToken = (payload: object) => {
+  if (!ENV.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  return jwt.sign(payload, ENV.JWT_SECRET, {
+    expiresIn: ENV.JWT_EXPIRES_IN as jwt.SignOptions["expiresIn"],
+  });
+};
+
+export const verifyToken = (token: string) => {
+  if (!ENV.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  return jwt.verify(token, ENV.JWT_SECRET);
+};
